@@ -14,7 +14,7 @@ services:
       - back_net
 
   backend:
-    image: backend:latest
+    build: ./backend
     environment:
       DATABASE_HOST: db
       DATABASE_USER: django
@@ -30,7 +30,7 @@ services:
       - back_net
 
   frontend:
-    image: front:latest
+    build: ./frontend
     ports:
       - "8080:80"
     depends_on:

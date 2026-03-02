@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Django CI
+name: Django Docker CI
 
 on:
   push:
@@ -9,13 +9,30 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: pip install -r backend/requirements.txt
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build containers
+        run: docker compose build
+
+      - name: Start containers
+        run: docker compose up -d
+
+      - name: Wait for Postgres
+        run: |
+          until docker compose exec -T db pg_isready -U django; do
+            echo "Waiting for postgres..."
+            sleep 2
+          done
+
+      - name: Run migrations
+        run: docker compose exec -T backend python manage.py migrate
+
       - name: Run tests
-        run: python backend/manage.py test
+        run: docker compose exec -T backend python manage.py test
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down
