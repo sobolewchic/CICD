@@ -14,7 +14,9 @@ services:
       - back_net
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile_backend
     environment:
       DATABASE_HOST: db
       DATABASE_USER: django
