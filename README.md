@@ -18,8 +18,6 @@ PostgreSQL — база данных
 Nginx - Отдает статические файлы frontend и проксирует все запросы /api/* в backend
 Все сервисы взаимодействуют через Docker-сеть, без прямого доступа к базе данных извне.
 
-Структура проекта:
-
 <img width="239" height="398" alt="image" src="https://github.com/user-attachments/assets/bf0c49d5-4e95-4b34-b939-2618348a8329" />
 
 Запуск проекта:
